@@ -1,39 +1,31 @@
+const JSParser = require('./parser.js');
+const JSInterpreter = require('./interpreter.js');
+const JSCompiler = require('./compiler.js');
+
 class JSEngine {
-    static operatorToOpCode = {
-        "+": 0,
-        "-": 1,
-        "*": 2,
-        "/": 3,
-        "%": 4,
-        "**": 5,
-    };
-
-    getByteCode(ast) {
-        return this.generateByteCode(ast).join('');
+    constructor() {
+        this.parser = new JSParser();
+        this.interpreter = new JSInterpreter();
+        this.compiler = new JSCompiler();
     }
-      
-    generateByteCode(ast) {
-        if (ast.type === 'BinaryOperator') {
-            const leftBytecode = this.generateByteCode(ast.leftOperand);
-            const rightBytecode = this.generateByteCode(ast.rightOperand);
 
-            let operatorCode = JSEngine.operatorToOpCode[ast.operator];
-      
-            return [
-                ...leftBytecode,
-                ...rightBytecode,
-                operatorCode,
-            ];
-        }
-        
-        if (ast.type === 'Literal') {
-            const LOAD_CONST = 6;
-            
-            return [parseInt(ast.value), LOAD_CONST];
-        }
+    runCode(jsCode) {
+        const astBinaryTreeRoot = this.parser.parse(jsCode);
 
-        throw new Error(`Unknown node type: ${ast.type}`);
-      }
+        const byteCode = this.interpreter.getByteCode(astBinaryTreeRoot);
+        this.runByteCode(byteCode);
+
+        const machineCode = this.compiler.getMachineCode(byteCode);
+        this.runMachineCode(machineCode);
+    }
+
+    runByteCode(byteCode) {
+        console.log(byteCode, ' is running');
+    }
+
+    runMachineCode(machineCode) {
+        console.log(machineCode, ' is running');
+    }
 }
 
 module.exports = JSEngine;
