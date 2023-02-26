@@ -1,22 +1,24 @@
 const JSParser = require('./parser.js');
 const JSInterpreter = require('./interpreter.js');
-const JSCompiler = require('./compiler.js');
+const JSBaseCompiler = require('./baseCompiler.js');
+const JSOptimizingCompiler = require('./optimizingCompiler.js');
 
 class JSEngine {
     constructor() {
         this.parser = new JSParser();
-        this.interpreter = new JSInterpreter();
-        this.compiler = new JSCompiler();
+        this.baseCompiler = new JSBaseCompiler();
+        this.optimizingCompiler = new JSOptimizingCompiler();
+        this.interpreter = new JSInterpreter(this.optimizingCompiler);
     }
 
     runCode(jsCode) {
         const astBinaryTreeRoot = this.parser.parse(jsCode);
+        const byteCode = this.baseCompiler.getByteCode(astBinaryTreeRoot);
 
-        const byteCode = this.interpreter.getByteCode(astBinaryTreeRoot);
-        this.runByteCode(byteCode);
-
-        const machineCode = this.compiler.getMachineCode(byteCode);
+        const machineCode = this.interpreter.getMachineCode(byteCode);
         this.runMachineCode(machineCode);
+
+        this.optimizingCompiler.generateOptimizingCode(byteCode);
     }
 
     runByteCode(byteCode) {

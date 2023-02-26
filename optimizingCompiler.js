@@ -1,4 +1,4 @@
-class JSCompiler {
+class JSOptimizingCompiler {
     constructor() {
         this.byteCodeToMachineCodeCache = {};
     }
@@ -12,7 +12,7 @@ class JSCompiler {
         5: '0x0b',
     }
 
-    getMachineCode(byteCode) {
+    generateOptimizingCode(byteCode) {
         let machineCode = this.byteCodeToMachineCodeCache[byteCode];
         if (!machineCode) {
 
@@ -56,7 +56,7 @@ class JSCompiler {
       
         for (let i = 0; i < bytecode.length; i++) {
             const byte = bytecode[i];
-            const machineCodePart = JSCompiler.byteCodeToMachineCode[byte];
+            const machineCodePart = JSOptimizingCompiler.byteCodeToMachineCode[byte];
 
             machineCode.push(machineCodePart);
         }
@@ -69,4 +69,4 @@ class JSCompiler {
     }
 }
 
-module.exports = JSCompiler;
+module.exports = JSOptimizingCompiler;

@@ -1,38 +1,40 @@
 class JSInterpreter {
-    static operatorToOpCode = {
-        "+": 0,
-        "-": 1,
-        "*": 2,
-        "/": 3,
-        "%": 4,
-        "**": 5,
-    };
-    
-    getByteCode(ast) {
-        return this.generateByteCode(ast).join('');
+    constructor(jsOptimizingCompiler) {
+        this.byteCodeToMachineCodeCache = jsOptimizingCompiler.byteCodeToMachineCodeCache;
     }
-      
-    generateByteCode(ast) {
-        if (ast.type === 'BinaryOperator') {
-            const leftBytecode = this.generateByteCode(ast.leftOperand);
-            const rightBytecode = this.generateByteCode(ast.rightOperand);
 
-            let operatorCode = JSInterpreter.operatorToOpCode[ast.operator];
-      
-            return [
-                ...leftBytecode,
-                ...rightBytecode,
-                operatorCode,
-            ];
-        }
-        
-        if (ast.type === 'Literal') {
-            const LOAD_CONST = 6;
-            
-            return [parseInt(ast.value), LOAD_CONST];
+    static byteCodeToMachineCode = {
+        0: '0x410x01',
+        1: '0x410x02',
+        2: '0x6a',
+        3: '0x360x000x00',
+        4: '0x280x020x000x000x00',
+        5: '0x0b',
+    }
+
+    getMachineCode(byteCode) {
+        let machineCode = this.byteCodeToMachineCodeCache[byteCode];
+        if (!machineCode) {
+
+            machineCode = this.generateMachineCode(byteCode).join('');
         }
 
-        throw new Error(`Unknown node type: ${ast.type}`);
+        return machineCode;
+    }
+
+    generateMachineCode(bytecode) {
+        const machineCode = [];
+      
+        for (let i = 0; i < bytecode.length; i++) {
+            const byte = bytecode[i];
+            const machineCodePart = JSInterpreter.byteCodeToMachineCode[byte];
+
+            machineCode.push(machineCodePart);
+        }
+
+        const newMachineCode = new Uint8Array(machineCode);
+      
+        return newMachineCode;
     }
 }
 
