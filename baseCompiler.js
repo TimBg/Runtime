@@ -1,3 +1,5 @@
+'use strict'
+
 class JSBaseCompiler {
     static operatorToOpCode = {
         "+": 0,

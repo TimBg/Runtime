@@ -1,3 +1,5 @@
+'use strict'
+
 const JSEngine = require('./jsEngine.js'); 
 
 const jsEngine = new JSEngine();

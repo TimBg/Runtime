@@ -1,3 +1,5 @@
+'use strict'
+
 class JSInterpreter {
     constructor(jsOptimizingCompiler) {
         this.byteCodeToMachineCodeCache = jsOptimizingCompiler.byteCodeToMachineCodeCache;

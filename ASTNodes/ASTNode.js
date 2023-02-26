@@ -1,3 +1,5 @@
+'use strict'
+
 class ASTNode {
     constructor(type) {
         this.type = type;

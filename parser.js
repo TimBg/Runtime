@@ -1,3 +1,5 @@
+'use strict'
+
 const { ASTNumberNode, ASTBinaryOperatorNode } = require('./ASTNodes/astNodes.js');
 
 class JSParser {

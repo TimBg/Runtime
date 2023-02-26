@@ -1,3 +1,5 @@
+'use strict'
+
 const ASTNode = require('./ASTNode.js');
 
 class ASTNumberNode extends ASTNode {

@@ -1,3 +1,5 @@
+'use strict'
+
 const JSParser = require('./parser.js');
 const JSInterpreter = require('./interpreter.js');
 const JSBaseCompiler = require('./baseCompiler.js');
